@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B1326">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<title>درع — أمن سيبراني وبرمجة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B1326; --surface:#121C34; --raise:#1A2644; --line:#2A3A60;
+  --text:#EEF1F8; --muted:#93A3C6; --accent:#E3B45C; --accent-ink:#2A1C03;
+  --steel:#7FB4D6; --bad:#F28B7A; --good:#7EDCAB;
+  --font:"IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --display:"Reem Kufi","IBM Plex Sans Arabic",sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --shield:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 76'%3E%3Cpath d='M32 3 58 13v23c0 17-11 30-26 37C17 66 6 53 6 36V13Z' fill='%23E3B45C' fill-opacity='.1' stroke='%23E3B45C' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M32 13 50 20v16c0 11-7 20-18 25C21 56 14 47 14 36V20Z' fill='none' stroke='%23E3B45C' stroke-opacity='.5' stroke-width='1.4'/%3E%3Cpath d='M32 27l7 11-7 11-7-11Z' fill='%23E3B45C'/%3E%3C/svg%3E");
+  --star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 4l5 14 14-5-9 12 14 3-14 3 9 12-14-5-5 14-5-14-14 5 9-12-14-3 14-3-9-12 14 5Z' fill='none' stroke='%23E3B45C' stroke-opacity='.07'/%3E%3C/svg%3E");
+  --gold:linear-gradient(180deg,#F1CB7B,#D6A244);
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{color:var(--text);font:400 16px/1.75 var(--font);
+  background:radial-gradient(ellipse 80% 50% at 50% -8%,rgba(227,180,92,.14),transparent 70%),var(--star),var(--bg);
+  scrollbar-color:var(--line) transparent}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+.app{display:flex;flex-direction:column;height:100dvh;
+  padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+header{display:flex;align-items:center;gap:12px;padding:12px 20px;flex:none;
+  background:rgba(11,19,38,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(227,180,92,.12)}
+.brand{display:inline-flex;align-items:center;gap:.5rem;font:700 1.7rem/1 var(--display);color:var(--accent)}
+.brand::before{content:"";width:.9em;height:1.07em;background:var(--shield) center/contain no-repeat}
+.tag{color:var(--muted);font-size:.88rem}
+.gear{background:rgba(26,38,68,.6);border:1px solid var(--line);border-radius:999px;padding:5px 14px;color:var(--muted);font-size:.88rem;transition:color .15s,border-color .15s}
+.gear:first-of-type{margin-inline-start:auto}
+.gear:hover{color:var(--text);border-color:var(--accent)}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:14px 20px 6px;flex:none;scrollbar-width:none}
+.chip{flex:none;background:rgba(18,28,52,.8);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:7px 16px;font-size:.88rem;white-space:nowrap;transition:color .15s,border-color .15s,background .15s}
+.chip:hover{border-color:var(--accent);color:var(--accent);background:rgba(227,180,92,.08)}
+
+main{flex:1;overflow:auto;padding:14px 20px}
+.col{max-width:780px;margin:0 auto;display:grid;gap:22px;padding-bottom:10px}
+.empty{margin:6vh auto 0;max-width:480px;text-align:center;display:grid;justify-items:center;gap:12px}
+.empty::before{content:"";width:118px;height:138px;background:var(--shield) center/contain no-repeat;
+  filter:drop-shadow(0 0 28px rgba(227,180,92,.38));animation:forge 1.2s cubic-bezier(.2,.8,.2,1) both}
+.empty h1{margin:6px 0 0;font:700 2.3rem/1.2 var(--display)}
+.empty p{margin:0;color:var(--muted);max-width:34ch}
+@keyframes forge{from{opacity:0;transform:scale(.85);filter:drop-shadow(0 0 0 rgba(227,180,92,0))}to{opacity:1;transform:none;filter:drop-shadow(0 0 28px rgba(227,180,92,.38))}}
+
+.u{justify-self:start;max-width:min(540px,92%);background:linear-gradient(135deg,rgba(227,180,92,.17),rgba(227,180,92,.06));
+  border:1px solid rgba(227,180,92,.38);border-radius:18px 18px 4px 18px;padding:10px 16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.a{border-inline-start:2px solid;border-image:linear-gradient(to bottom,var(--accent),transparent) 1;padding:2px 0 4px;padding-inline-start:18px}
+.a header{border:0;padding:0;margin:0 0 2px;background:none;backdrop-filter:none;box-shadow:none}
+.by{display:inline-flex;align-items:center;gap:7px;font:500 .78rem var(--mono);color:var(--muted)}
+.by::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--steel);box-shadow:0 0 8px var(--steel)}
+.prose p{margin:.25em 0 .75em}
+.prose ul,.prose ol{margin:.3em 0 .75em;padding-inline-start:1.4em}
+.prose li::marker{color:var(--accent)}
+.prose strong{font-weight:600;color:#fff}
+.prose code{font-family:var(--mono);background:var(--raise);padding:.08em .4em;border-radius:6px;font-size:.88em;direction:ltr;unicode-bidi:isolate}
+.code{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:.7em 0;background:#070C1A;box-shadow:0 8px 28px -12px rgba(0,0,0,.7)}
+.code-h{display:flex;justify-content:space-between;align-items:center;padding:4px 12px;background:var(--surface);border-bottom:1px solid var(--line);color:var(--accent);font:500 .78rem var(--mono)}
+.copy{background:none;border:0;color:var(--muted);padding:2px 9px;border-radius:6px;font:inherit}
+.copy:hover{color:var(--text);background:var(--raise)}
+.code pre{margin:0;padding:14px;overflow:auto;font:400 .85rem/1.65 var(--mono);text-align:left;direction:ltr}
+.code code{background:none;padding:0}
+.think{display:flex;align-items:center;gap:6px;color:var(--muted);border-inline-start:2px solid var(--line);padding:4px 0;padding-inline-start:18px}
+.think i{width:.42rem;height:.42rem;border-radius:50%;background:var(--accent);animation:p 1.2s infinite ease-in-out}
+.think i:nth-child(2){animation-delay:.15s}.think i:nth-child(3){animation-delay:.3s}
+@keyframes p{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.err{color:var(--bad)}
+.a.err{border-image:linear-gradient(to bottom,var(--bad),transparent) 1}
+
+.composer{flex:none;padding:8px 20px 16px}
+.box{max-width:780px;margin:0 auto;display:flex;align-items:flex-end;gap:8px;background:rgba(18,28,52,.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:20px;padding:7px;
+  box-shadow:0 14px 44px -14px rgba(0,0,0,.75);transition:border-color .15s,box-shadow .15s}
+.box:focus-within{border-color:var(--accent);box-shadow:0 14px 44px -14px rgba(0,0,0,.75),0 0 0 3px rgba(227,180,92,.16)}
+textarea{flex:1;background:none;border:0;outline:none;resize:none;max-height:180px;padding:9px 12px;min-width:0}
+textarea::placeholder{color:var(--muted)}
+.send{background:var(--gold);color:var(--accent-ink);border:0;border-radius:14px;padding:9px 22px;font-weight:700}
+.send:hover{filter:brightness(1.08)}
+.send:disabled{opacity:.4}
+
+/* ---------- الدخول ---------- */
+.login{position:fixed;inset:0;display:grid;place-items:center;z-index:50;padding:20px;
+  background:radial-gradient(ellipse 70% 55% at 50% 30%,rgba(227,180,92,.16),transparent 70%),var(--star),var(--bg)}
+.lp{width:min(400px,100%);display:grid;gap:14px;justify-items:center;text-align:center;padding:34px 28px 28px;
+  background:rgba(18,28,52,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px -20px rgba(0,0,0,.8)}
+.lp .brand{font-size:2.6rem;flex-direction:column;gap:.6rem}
+.lp .brand::before{width:.95em;height:1.12em;filter:drop-shadow(0 0 22px rgba(227,180,92,.4))}
+.lp p{margin:0;color:var(--muted)}
+.lp form{display:grid;gap:10px;width:100%}
+#le{min-height:1.4em;color:var(--bad);font-size:.88rem}
+
+/* ---------- الإعدادات ---------- */
+.scrim{position:fixed;inset:0;background:rgba(4,7,16,.65);backdrop-filter:blur(3px);z-index:20}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(480px,100%);background:rgba(14,22,42,.97);
+  border-inline-end:1px solid var(--line);box-shadow:0 0 60px rgba(0,0,0,.6);z-index:30;display:flex;flex-direction:column;
+  transform:translateX(-100%);visibility:hidden;transition:transform .22s ease,visibility 0s .22s}
+.drawer.open{transform:none;visibility:visible;transition:transform .22s ease}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font:700 1.25rem var(--display);color:var(--accent)}
+.db{flex:1;overflow:auto;padding:18px 18px 40px;display:grid;gap:24px;align-content:start}
+.db h3{margin:0 0 8px;font-size:1rem}
+.hint{margin:0 0 10px;color:var(--muted);font-size:.85rem}
+.prov{border:1px solid var(--line);border-radius:14px;margin-bottom:9px;background:var(--bg)}
+.prov[open]{border-color:rgba(227,180,92,.45)}
+.prov>summary{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;list-style:none}
+.prov>summary::-webkit-details-marker{display:none}
+.tag2{margin-inline-start:auto;font-size:.74rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 10px}
+.tag2.ok{color:var(--good);border-color:var(--good)}
+.tag2.gold{color:var(--accent);border-color:var(--accent);margin-inline-start:0}
+.pbody{display:grid;gap:10px;padding:4px 14px 14px}
+.pbody label,.form label{display:grid;gap:4px;font-size:.84rem;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>.f{flex:1;min-width:0}
+.f{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:100%;color:var(--text)}
+.f:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(227,180,92,.14)}
+.btn{background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:7px 15px;white-space:nowrap;transition:border-color .15s}
+.btn:hover{border-color:var(--accent)}
+.btn.gold{background:var(--gold);color:var(--accent-ink);border-color:transparent;font-weight:700}
+.btn.bad{color:var(--bad)}
+.form{display:grid;gap:10px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--raise);border:1px solid var(--accent);
+  border-radius:12px;padding:10px 18px;z-index:60;max-width:90vw;white-space:pre-wrap;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+@media(max-width:600px){
+  header{padding:10px 14px}.tag{display:none}.brand{font-size:1.5rem}
+  .chips,main,.composer{padding-inline:14px}.empty h1{font-size:1.9rem}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="login" id="login" hidden>
+  <div class="lp">
+    <div class="brand">درع</div>
+    <p>ادخل بالباسورد اللي طلع لك من الأمر <code dir="ltr">setup</code>.</p>
+    <form id="lf">
+      <input class="f" id="pw" type="password" placeholder="الباسورد" dir="ltr" autocomplete="current-password" required>
+      <button class="btn gold" type="submit">دخول</button>
+    </form>
+    <div id="le" role="alert"></div>
+  </div>
+</div>
+
+<div class="app">
+  <header>
+    <span class="brand">درع</span>
+    <span class="tag">أمن سيبراني وبرمجة</span>
+    <button class="gear" id="openset">الإعدادات</button>
+    <button class="gear" id="logout">خروج</button>
+  </header>
+  <div class="chips" id="chips"></div>
+  <main><div class="col" id="msgs"></div></main>
+  <div class="composer">
+    <div class="box">
+      <textarea id="inp" rows="1" placeholder="اسأل عن أي موضوع أمن سيبراني، أو اطلب كود..."></textarea>
+      <button class="send" id="send">إرسال</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="drawer" id="drawer" aria-label="الإعدادات">
+  <div class="dh"><h2>الإعدادات</h2><button class="btn" id="closeset">إغلاق</button></div>
+  <div class="db">
+    <div>
+      <h3>النماذج</h3>
+      <p class="hint">المفتاح يتحفظ في السيرفر وما يرجع للمتصفح أبدًا. لو الأساسي وقف، ينتقل تلقائيًا للي بعده.</p>
+      <div id="provs"></div>
+    </div>
+    <div>
+      <h3>إضافة نموذج</h3>
+      <p class="hint">أي مزود يدعم صيغة OpenAI يشتغل: DeepSeek وTogether وCerebras وغيرها.</p>
+      <div class="form">
+        <div class="row">
+          <input class="f" id="np-name" placeholder="الاسم (مثل deepseek)" dir="ltr" autocomplete="off">
+          <select class="f" id="np-type" style="max-width:140px"><option value="openai">openai</option><option value="anthropic">anthropic</option></select>
+        </div>
+        <input class="f" id="np-url" placeholder="الرابط (https://.../v1)" dir="ltr" autocomplete="off">
+        <input class="f" id="np-model" placeholder="اسم الموديل" dir="ltr" autocomplete="off">
+        <input class="f" id="np-key" type="password" placeholder="المفتاح (اختياري الحين)" dir="ltr" autocomplete="off">
+        <div><button class="btn gold" id="np-add">إضافة</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const TOPICS = [
+  ['التشفير', 'اشرح لي أساسيات التشفير المتماثل وغير المتماثل بأمثلة'],
+  ['أمن الشبكات', 'اشرح لي أساسيات أمن الشبكات: الجدران النارية وVPN وأنظمة كشف التسلل'],
+  ['الهندسة الاجتماعية', 'اشرح لي أساليب الهندسة الاجتماعية الشائعة وكيف أحمي نفسي وفريقي منها'],
+  ['اختبار الاختراق الأخلاقي', 'اشرح لي مراحل اختبار الاختراق الأخلاقي وإطاره القانوني'],
+  ['أمن تطبيقات الويب', 'اشرح لي أهم ثغرات OWASP Top 10 وكيف أحمي تطبيقي منها'],
+  ['اكتب لي كود', 'اكتب لي سكربت بايثون يفحص قوة كلمة مرور ويعطي اقتراحات لتحسينها'],
+];
+
+let state = null, hist = [], busy = false;
+
+async function api(path, opt) {
+  const r = await fetch(path, {
+    method: (opt && opt.method) || (opt && opt.body ? 'POST' : 'GET'),
+    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('diraa_tok') || '')},
+    body: opt && opt.body ? JSON.stringify(opt.body) : undefined
+  });
+  if (r.status === 401) { showLogin(); throw new Error('401'); }
+  return r.json();
+}
+function toast(t){ const el=$('#toast'); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,4000); }
+
+function fmt(l){
+  return l.replace(/`([^`]+)`/g,'<code>$1</code>')
+          .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+          .replace(/^#{1,6}\s+(.*)$/,'<strong>$1</strong>');
+}
+function block(t){
+  return esc(t).split(/\n{2,}/).filter(x=>x.trim()).map(par=>{
+    const L = par.split('\n');
+    if (L.every(l=>/^\s*[-*•]\s+/.test(l))) return '<ul>'+L.map(l=>'<li>'+fmt(l.replace(/^\s*[-*•]\s+/,''))+'</li>').join('')+'</ul>';
+    if (L.every(l=>/^\s*\d+[.)]\s+/.test(l))) return '<ol>'+L.map(l=>'<li>'+fmt(l.replace(/^\s*\d+[.)]\s+/,''))+'</li>').join('')+'</ol>';
+    return '<p>'+L.map(fmt).join('<br>')+'</p>';
+  }).join('');
+}
+function md(src){
+  return String(src).split('```').map((p,i)=>{
+    if (i%2){
+      const nl = p.indexOf('\n');
+      const lang = nl>-1 ? p.slice(0,nl).trim() : '';
+      const code = (nl>-1 ? p.slice(nl+1) : p).replace(/\n$/,'');
+      return `<div class="code"><div class="code-h"><span dir="ltr">${esc(lang)||'code'}</span><button class="copy" type="button">نسخ</button></div><pre><code>${esc(code)}</code></pre></div>`;
+    }
+    return block(p);
+  }).join('');
+}
+function add(html, cls){
+  const d=document.createElement('div'); if(cls) d.className=cls; d.innerHTML=html;
+  $('#msgs').appendChild(d); $('main').scrollTop = $('main').scrollHeight; return d;
+}
+function showEmpty(){
+  if ($('#msgs').children.length) return;
+  const ready = (state?.providers||[]).filter(p=>p.usable);
+  if (!ready.length) add(`<h1>ما فيه نموذج جاهز</h1><p>ضيف مفتاح API لنموذج واحد على الأقل من الإعدادات.</p><button class="btn gold" id="empty-set">افتح الإعدادات</button>`,'empty');
+  else add(`<h1>اسأل درع</h1><p>اختر موضوعًا من الأعلى أو اكتب سؤالك مباشرة.</p>`,'empty');
+  const b=$('#empty-set'); if(b) b.onclick=openSettings;
+}
+function clearEmpty(){ const e=document.querySelector('#msgs .empty'); if(e) e.remove(); }
+
+async function send(text){
+  if (!text || busy) return;
+  clearEmpty();
+  add(esc(text), 'u');
+  const wait = add('<i></i><i></i><i></i>', 'think');
+  busy = true; $('#send').disabled = true;
+  try {
+    const d = await api('/api/chat', {body:{message:text, history: hist.slice(-12)}});
+    wait.remove();
+    if (d.by) add(`<div class="by">${esc(d.by)}</div><div class="prose">${md(d.reply)}</div>`,'a');
+    else add(`<div class="prose">${md(d.reply)}</div>`,'a err');
+    hist.push({role:'user',content:text},{role:'assistant',content:d.reply});
+  } catch(e){
+    wait.remove();
+    if (e.message !== '401') add('تعذّر الاتصال بالسيرفر.', 'a err');
+  }
+  busy = false; $('#send').disabled = false; $('#inp').focus();
+}
+
+function autosize(){ const t=$('#inp'); t.style.height='auto'; t.style.height=Math.min(t.scrollHeight,180)+'px'; }
+$('#send').onclick = () => { const t=$('#inp').value.trim(); $('#inp').value=''; autosize(); send(t); };
+$('#inp').addEventListener('input', autosize);
+$('#inp').addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey && !e.isComposing){ e.preventDefault(); $('#send').click(); } });
+$('#chips').addEventListener('click', e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  send(TOPICS[[...$('#chips').children].indexOf(b)][1]);
+});
+$('#msgs').addEventListener('click', e=>{
+  const b=e.target.closest('.copy'); if(!b) return;
+  navigator.clipboard.writeText(b.closest('.code').querySelector('code').textContent)
+    .then(()=>{ b.textContent='تم النسخ'; setTimeout(()=>b.textContent='نسخ',1500); });
+});
+
+/* ---------- الإعدادات ---------- */
+function openSettings(){ $('#drawer').classList.add('open'); $('#scrim').hidden=false; }
+function closeSettings(){ $('#drawer').classList.remove('open'); $('#scrim').hidden=true; }
+$('#openset').onclick = openSettings;
+$('#closeset').onclick = closeSettings;
+$('#scrim').onclick = closeSettings;
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSettings(); });
+
+function renderProvs(){
+  const open = new Set([...document.querySelectorAll('#provs details[open]')].map(d=>d.dataset.n));
+  $('#provs').innerHTML = state.providers.map(p => `
+    <details class="prov" data-n="${esc(p.name)}" ${open.has(p.name)?'open':''}>
+      <summary><b>${esc(p.name)}</b>
+        ${p.default?'<span class="tag2 gold">الأساسي</span>':''}
+        <span class="tag2 ${p.usable?'ok':''}">${p.usable?'جاهز':(!p.enabled?'مطفّي':'بدون مفتاح')}</span></summary>
+      <div class="pbody">
+        <label>المفتاح<div class="row"><input class="f" type="password" data-k="key" dir="ltr" autocomplete="off" placeholder="${p.has_key?'محفوظ. اكتب مفتاح جديد للاستبدال':'الصق المفتاح هنا'}"><button class="btn gold" data-a="key">حفظ</button></div></label>
+        <label>الموديل<div class="row"><input class="f" data-k="model" dir="ltr" value="${esc(p.model)}"><button class="btn" data-a="model">حفظ</button></div></label>
+        <label>الرابط<div class="row"><input class="f" data-k="base_url" dir="ltr" value="${esc(p.base_url)}"><button class="btn" data-a="base_url">حفظ</button></div></label>
+        <div class="row">
+          <button class="btn" data-a="test">اختبار</button>
+          <button class="btn" data-a="toggle">${p.enabled?'إيقاف':'تشغيل'}</button>
+          ${p.default?'':'<button class="btn" data-a="default">اجعله الأساسي</button>'}
+          <button class="btn bad" data-a="remove">حذف</button>
+        </div>
+      </div>
+    </details>`).join('');
+}
+$('#provs').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-a]'); if(!b) return;
+  const d = b.closest('details'), n = d.dataset.n, a = b.dataset.a;
+  const val = k => d.querySelector(`[data-k=${k}]`).value.trim();
+  try {
+    if (a==='key'||a==='model'||a==='base_url'){
+      const v = val(a); if(!v) return toast('القيمة فاضية.');
+      await api(`/api/providers/${n}`, {method:'PATCH', body:{[a]:v}});
+    } else if (a==='toggle'){
+      const p = state.providers.find(x=>x.name===n);
+      await api(`/api/providers/${n}`, {method:'PATCH', body:{enabled: !p.enabled}});
+    } else if (a==='default'){
+      await api(`/api/providers/${n}`, {method:'PATCH', body:{make_default:true}});
+    } else if (a==='test'){
+      toast('أختبر '+n+'…');
+      const r = await api(`/api/providers/${n}/test`, {method:'POST', body:{}});
+      toast(r.ok ? `✓ ${n} يشتغل (${r.seconds} ث)` : `✗ ${n}: ${r.error}`);
+    } else if (a==='remove'){
+      if (!confirm('تحذف '+n+'؟')) return;
+      await api(`/api/providers/${n}`, {method:'DELETE'});
+    }
+    await refreshState();
+  } catch(err){ toast('صار خطأ، حاول مرة ثانية.'); }
+});
+$('#np-add').onclick = async () => {
+  const g = id => $(id).value.trim();
+  const body = {name:g('#np-name'), type:$('#np-type').value, base_url:g('#np-url'), model:g('#np-model'), key:g('#np-key')};
+  if (![body.name,body.base_url,body.model].every(Boolean)) return toast('عبّي الاسم والرابط والموديل.');
+  const r = await api('/api/providers', {body});
+  if (r.error) return toast(r.error);
+  ['#np-name','#np-url','#np-model','#np-key'].forEach(i=>$(i).value='');
+  toast('تمت الإضافة ✓');
+  await refreshState();
+};
+
+async function refreshState(){
+  state = await api('/api/state');
+  renderProvs();
+  $('#chips').innerHTML = TOPICS.map(([l])=>`<button class="chip">${esc(l)}</button>`).join('');
+  showEmpty();
+}
+
+/* ---------- الدخول ---------- */
+function showLogin(){ closeSettings(); $('#login').hidden=false; $('#pw').focus(); }
+$('#lf').addEventListener('submit', async e => {
+  e.preventDefault(); $('#le').textContent='';
+  try {
+    const r = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:$('#pw').value})});
+    const d = await r.json();
+    if (d.token){ localStorage.setItem('diraa_tok', d.token); $('#pw').value=''; $('#login').hidden=true; $('#msgs').innerHTML=''; hist=[]; await refreshState(); }
+    else $('#le').textContent = d.error || 'تعذّر الدخول.';
+  } catch(err){ $('#le').textContent = 'تعذّر الاتصال بالسيرفر.'; }
+});
+$('#logout').onclick = async () => { try{ await api('/api/logout', {body:{}}); }catch(e){} localStorage.removeItem('diraa_tok'); showLogin(); };
+
+refreshState().catch(()=>{});
+</script>
+</body>
+</html>
